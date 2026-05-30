@@ -24,7 +24,7 @@ class CreateProfile extends FormRequest
     {
         return [
             'bio' => 'nullable|string',
-            'avatar_photo' => 'nullable|string',
+            'avatar_photo' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ];
     }
 }
