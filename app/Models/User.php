@@ -52,4 +52,29 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
+
+    public function fontesRenda(): HasOne
+    {
+        return $this->hasOne(FontesRenda::class);
+    }
+    public function caixasFinanceiras(): HasOne
+    {
+        return $this->hasOne(CaixasFinanceiras::class);
+    }
+    public function rendas(): HasOne
+    {
+        return $this->hasOne(Rendas::class);
+    }
+    public function movimentacoesCaixas(): HasOne
+    {
+        return $this->hasOne(MovimentacoesCaixas::class);
+    }
+    public function categoriasGastos(): HasOne
+    {
+        return $this->hasOne(CategoriasGastos::class);
+    }
+    public function gastosItens(): HasOne
+    {
+        return $this->hasOne(GastosItens::class);
+    }
 }
