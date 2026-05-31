@@ -10,11 +10,13 @@ class Profile extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_profiles';
+
     protected $fillable = [
         'user_id',
         'bio',
         'avatar_photo',
-        
+
     ];
 
     public function user(): BelongsTo

@@ -17,7 +17,7 @@ Route::post('/auth/login',    LoginController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', LogoutController::class);
-    Route::get('/auth/me', fn(Request $r) => new UserResource($r->user()));
+    Route::get('/auth/me', fn(Request $r) => new UserResource($r->user()->load('profile')));
 
     Route::get('/profile',  ShowProfile::class);
     Route::post('/profile', CreateProfile::class);
