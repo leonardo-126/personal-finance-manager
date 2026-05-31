@@ -4,6 +4,9 @@ namespace App\Http\Requests\Fontes_renda;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Status;
+use TipoFonteRenda;
 
 class UpdateFontesRenda extends FormRequest
 {
@@ -12,7 +15,7 @@ class UpdateFontesRenda extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +26,10 @@ class UpdateFontesRenda extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome'      => ['required', 'string', 'max:255'],
+            'tipo'      => ['required', Rule::enum(TipoFonteRenda::class)],
+            'descricao' => ['nullable', 'string'],
+            'status'    => ['required', Rule::enum(Status::class)],
         ];
     }
 }

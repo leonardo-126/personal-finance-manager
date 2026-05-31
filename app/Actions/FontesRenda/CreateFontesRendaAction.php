@@ -1,11 +1,21 @@
 <?php
 
+use App\Models\FontesRenda;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class CreateFontesRendaAction
 {
-    public function execute(array $data)
+    public function execute(array $data): FontesRenda
     {
-        // Lógica para criar uma nova fonte de renda
-        // Exemplo:
-        // return FontesRenda::create($data);
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            
+            return $user->fontesRenda()->create([
+                'nome' => $data['nome'],
+                'tipo' => $data['tipo'],
+                'descricao' => $data['descricao'] ?? null,
+            ]);
+        });
     }
 }
