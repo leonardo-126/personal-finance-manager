@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\fontes_renda;
+namespace App\Http\Controllers\Rendas;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\FontesRendaResource;
-use App\Http\Resources\ProfileResource;
+use App\Http\Resources\RendaResource;
 use Illuminate\Http\Request;
 
-class ShowFontesRenda extends Controller
+class ShowRenda extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -17,6 +16,6 @@ class ShowFontesRenda extends Controller
             return response()->json(['data' => null]);
         }
 
-        return new FontesRendaResource($profile->fontesRenda);
+        return RendaResource::collection($profile->rendas);
     }
 }

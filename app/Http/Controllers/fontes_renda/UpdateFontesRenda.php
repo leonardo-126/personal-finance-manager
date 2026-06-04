@@ -14,6 +14,8 @@ class UpdateFontesRenda extends Controller
     {
         $fontes_renda = $action->execute($request->id, $request->validated());
 
-        return new FontesRendaResource($fontes_renda);
+        return (new FontesRendaResource($fontes_renda))
+            ->response()
+            ->setStatusCode(200);
     }
 }
