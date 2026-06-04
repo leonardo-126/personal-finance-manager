@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Actions\FontesRenda;
+namespace App\Actions\CaixasFinaceiras;
 
-use App\Models\FontesRenda;
+use App\Models\CaixasFinanceiras;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class CreateFontesRendaAction
+class CreateCaixaFinanceiraAction
 {
-    public function execute(array $data): FontesRenda
+    public function execute(array $data): CaixasFinanceiras
     {
         return DB::transaction(function () use ($data) {
-            return Auth::user()->fontesRenda()->create([
+            return Auth::user()->caixasFinanceiras()->create([
                 'nome'      => $data['nome'],
-                'tipo'      => $data['tipo'],
                 'descricao' => $data['descricao'] ?? null,
             ]);
         });

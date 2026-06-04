@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Fontes_renda;
+namespace App\Http\Requests\CaixasFinaceiras;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Enums\Status;
-use App\Enums\TipoFonteRenda;
 
-class UpdateFontesRenda extends FormRequest
+class CreateCaixaFinanceiraRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +24,7 @@ class UpdateFontesRenda extends FormRequest
     {
         return [
             'nome'      => ['required', 'string', 'max:255'],
-            'tipo'      => ['required', Rule::enum(TipoFonteRenda::class)],
             'descricao' => ['nullable', 'string'],
-            'status'    => ['required', Rule::enum(Status::class)],
         ];
     }
 }

@@ -10,12 +10,6 @@ class ShowRenda extends Controller
 {
     public function __invoke(Request $request)
     {
-        $profile = $request->user()->profile;
-
-        if (! $profile) {
-            return response()->json(['data' => null]);
-        }
-
-        return RendaResource::collection($profile->rendas);
+        return RendaResource::collection($request->user()->rendas);
     }
 }

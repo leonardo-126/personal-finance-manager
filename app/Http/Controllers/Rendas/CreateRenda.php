@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Rendas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rendas\CreateRenda as CreateRendaRequest;
-use CreateRendaAction;
+use App\Actions\Rendas\CreateRendaAction;
 use App\Http\Resources\RendaResource;
-use Illuminate\Http\Request;
 
 class CreateRenda extends Controller
 {

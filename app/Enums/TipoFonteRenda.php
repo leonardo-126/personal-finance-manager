@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Enums;
+
 enum TipoFonteRenda: string
 {
     case Salario      = 'salário';

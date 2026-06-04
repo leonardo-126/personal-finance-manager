@@ -12,7 +12,7 @@ class UpdateRenda extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class UpdateRenda extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'fonte_renda_id'   => ['required', 'integer', 'exists:fontes_renda,id'],
+            'valor'            => ['required', 'numeric'],
+            'data_recebimento' => ['required', 'date'],
+            'descricao'        => ['nullable', 'string'],
         ];
     }
 }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\fontes_renda;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Fontes_renda\CreateFontesRenda as Fontes_rendaCreateFontesRenda;
 use App\Http\Resources\FontesRendaResource;
-use CreateFontesRendaAction;
-use GuzzleHttp\Promise\Create;
-use Illuminate\Http\Request;
+use App\Actions\FontesRenda\CreateFontesRendaAction;
 
 class createFontesRenda extends Controller
 {

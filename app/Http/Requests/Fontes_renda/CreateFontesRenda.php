@@ -5,7 +5,7 @@ namespace App\Http\Requests\Fontes_renda;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use TipoFonteRenda;
+use App\Enums\TipoFonteRenda;
 
 class CreateFontesRenda extends FormRequest
 {

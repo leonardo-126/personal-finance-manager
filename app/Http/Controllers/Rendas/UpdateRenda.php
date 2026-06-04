@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Rendas;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Rendas\CreateRenda as CreateRendaRequest;
+use App\Http\Requests\Rendas\UpdateRenda as UpdateRendaRequest;
 use App\Http\Resources\RendaResource;
-use Illuminate\Http\Request;
-use UpdateRendaAction;
+use App\Actions\Rendas\UpdateRendaAction;
 
 class UpdateRenda extends Controller
 {
-    public function __invoke(CreateRendaRequest $request, UpdateRendaAction $action)
+    public function __invoke(UpdateRendaRequest $request, UpdateRendaAction $action)
     {
-        $renda = $action->execute($request->validated(), $request->route('id'));
+        $renda = $action->execute((int) $request->route('id'), $request->validated());
 
         return (new RendaResource($renda))
             ->response()

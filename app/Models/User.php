@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,28 +54,28 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function fontesRenda(): HasOne
+    public function fontesRenda(): HasMany
     {
-        return $this->hasOne(FontesRenda::class);
+        return $this->hasMany(FontesRenda::class);
     }
-    public function caixasFinanceiras(): HasOne
+    public function caixasFinanceiras(): HasMany
     {
-        return $this->hasOne(CaixasFinanceiras::class);
+        return $this->hasMany(CaixasFinanceiras::class);
     }
-    public function rendas(): HasOne
+    public function rendas(): HasMany
     {
-        return $this->hasOne(Rendas::class);
+        return $this->hasMany(Rendas::class);
     }
-    public function movimentacoesCaixas(): HasOne
+    public function movimentacoesCaixas(): HasMany
     {
-        return $this->hasOne(MovimentacoesCaixas::class);
+        return $this->hasMany(MovimentacoesCaixas::class);
     }
-    public function categoriasGastos(): HasOne
+    public function categoriasGastos(): HasMany
     {
-        return $this->hasOne(CategoriasGastos::class);
+        return $this->hasMany(CategoriasGastos::class);
     }
-    public function gastosItens(): HasOne
+    public function gastosItens(): HasMany
     {
-        return $this->hasOne(GastosItens::class);
+        return $this->hasMany(GastosItens::class);
     }
 }
