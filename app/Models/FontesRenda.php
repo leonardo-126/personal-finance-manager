@@ -10,6 +10,8 @@ class FontesRenda extends Model
 {
     use HasFactory;
 
+    protected $table = 'fontes_renda';
+
     protected $fillable = [
         'user_id',
         'nome',
