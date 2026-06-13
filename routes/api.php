@@ -6,6 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CaixasFinaceiras\CreateCaixaFinanceira;
 use App\Http\Controllers\CaixasFinaceiras\ShowCaixaFinanceira;
 use App\Http\Controllers\CaixasFinaceiras\UpdateCaixaFinanceira;
+use App\Http\Controllers\MovimentacoesCaixas\CreateMovimentacaoCaixa;
+use App\Http\Controllers\MovimentacoesCaixas\ShowMovimentacaoCaixa;
+use App\Http\Controllers\MovimentacoesCaixas\UpdateMovimentacaoCaixa;
 use App\Http\Controllers\fontes_renda\createFontesRenda;
 use App\Http\Controllers\fontes_renda\ShowFontesRenda;
 use App\Http\Controllers\fontes_renda\UpdateFontesRenda;
@@ -46,4 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/caixas-financeiras',       ShowCaixaFinanceira::class);
     Route::post('/caixas-financeiras',      CreateCaixaFinanceira::class);
     Route::put('/caixas-financeiras/{id}',  UpdateCaixaFinanceira::class);
+
+    // Movimentações de caixas
+    Route::get('/movimentacoes-caixas',       ShowMovimentacaoCaixa::class);
+    Route::post('/movimentacoes-caixas',      CreateMovimentacaoCaixa::class);
+    Route::put('/movimentacoes-caixas/{id}',  UpdateMovimentacaoCaixa::class);
 });
