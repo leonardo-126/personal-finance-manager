@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -74,8 +75,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(CategoriasGastos::class);
     }
-    public function gastosItens(): HasMany
+    public function gastos(): HasMany
     {
-        return $this->hasMany(GastosItens::class);
+        return $this->hasMany(Gastos::class);
+    }
+    public function gastosItens(): HasManyThrough
+    {
+        return $this->hasManyThrough(GastosItens::class, Gastos::class, 'user_id', 'gasto_id');
     }
 }

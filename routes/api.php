@@ -6,6 +6,15 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CaixasFinaceiras\CreateCaixaFinanceira;
 use App\Http\Controllers\CaixasFinaceiras\ShowCaixaFinanceira;
 use App\Http\Controllers\CaixasFinaceiras\UpdateCaixaFinanceira;
+use App\Http\Controllers\CategoriasGastos\CreateCategoriaGasto;
+use App\Http\Controllers\CategoriasGastos\ShowCategoriaGasto;
+use App\Http\Controllers\CategoriasGastos\UpdateCategoriaGasto;
+use App\Http\Controllers\Gastos\CreateGasto;
+use App\Http\Controllers\Gastos\ShowGasto;
+use App\Http\Controllers\Gastos\UpdateGasto;
+use App\Http\Controllers\GastosItens\CreateGastoItem;
+use App\Http\Controllers\GastosItens\ShowGastoItem;
+use App\Http\Controllers\GastosItens\UpdateGastoItem;
 use App\Http\Controllers\MovimentacoesCaixas\CreateMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\ShowMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\UpdateMovimentacaoCaixa;
@@ -54,4 +63,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/movimentacoes-caixas',       ShowMovimentacaoCaixa::class);
     Route::post('/movimentacoes-caixas',      CreateMovimentacaoCaixa::class);
     Route::put('/movimentacoes-caixas/{id}',  UpdateMovimentacaoCaixa::class);
+
+    // Categorias de gastos
+    Route::get('/categorias-gastos',       ShowCategoriaGasto::class);
+    Route::post('/categorias-gastos',      CreateCategoriaGasto::class);
+    Route::put('/categorias-gastos/{id}',  UpdateCategoriaGasto::class);
+
+    // Gastos
+    Route::get('/gastos',       ShowGasto::class);
+    Route::post('/gastos',      CreateGasto::class);
+    Route::put('/gastos/{id}',  UpdateGasto::class);
+
+    // Itens de gastos
+    Route::get('/gastos-itens',       ShowGastoItem::class);
+    Route::post('/gastos-itens',      CreateGastoItem::class);
+    Route::put('/gastos-itens/{id}',  UpdateGastoItem::class);
 });
