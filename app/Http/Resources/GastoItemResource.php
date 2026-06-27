@@ -20,6 +20,7 @@ class GastoItemResource extends JsonResource
             'nome' => $this->nome,
             'valor' => $this->valor,
             'motivo' => $this->motivo,
+            'data_transacao' => $this->data_transacao,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -11,6 +11,8 @@ use App\Http\Controllers\CategoriasGastos\CreateCategoriaGasto;
 use App\Http\Controllers\CategoriasGastos\DeleteCategoriaGasto;
 use App\Http\Controllers\CategoriasGastos\ShowCategoriaGasto;
 use App\Http\Controllers\CategoriasGastos\UpdateCategoriaGasto;
+use App\Http\Controllers\Faturas\ImportarFatura;
+use App\Http\Controllers\Faturas\PreviewFatura;
 use App\Http\Controllers\Gastos\CreateGasto;
 use App\Http\Controllers\Gastos\DeleteGasto;
 use App\Http\Controllers\Gastos\ShowGasto;
@@ -92,4 +94,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/gastos-itens',         CreateGastoItem::class);
     Route::put('/gastos-itens/{id}',     UpdateGastoItem::class);
     Route::delete('/gastos-itens/{id}',  DeleteGastoItem::class);
+
+    // Faturas de cartão (importação Nubank)
+    Route::post('/faturas/preview',   PreviewFatura::class);
+    Route::post('/faturas/importar',  ImportarFatura::class);
 });

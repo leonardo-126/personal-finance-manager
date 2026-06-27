@@ -16,6 +16,11 @@ class GastosItens extends Model
         'nome',
         'valor',
         'motivo',
+        'data_transacao',
+    ];
+
+    protected $casts = [
+        'data_transacao' => 'date:Y-m-d',
     ];
 
     public function gasto(): BelongsTo
