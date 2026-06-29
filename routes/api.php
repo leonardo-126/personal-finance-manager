@@ -16,6 +16,7 @@ use App\Http\Controllers\Faturas\PreviewFatura;
 use App\Http\Controllers\Gastos\CreateGasto;
 use App\Http\Controllers\Gastos\DeleteGasto;
 use App\Http\Controllers\Gastos\ShowGasto;
+use App\Http\Controllers\Gastos\ShowGastoDetalhes;
 use App\Http\Controllers\Gastos\UpdateGasto;
 use App\Http\Controllers\GastosItens\CreateGastoItem;
 use App\Http\Controllers\GastosItens\DeleteGastoItem;
@@ -85,6 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Gastos
     Route::get('/gastos',          ShowGasto::class);
+    Route::get('/gastos/{id}',     ShowGastoDetalhes::class);
     Route::post('/gastos',         CreateGasto::class);
     Route::put('/gastos/{id}',     UpdateGasto::class);
     Route::delete('/gastos/{id}',  DeleteGasto::class);
