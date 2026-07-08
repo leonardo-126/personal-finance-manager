@@ -13,11 +13,15 @@ class CreateGastoItemAction
         return DB::transaction(function () use ($data) {
             $gasto = Auth::user()->gastos()->findOrFail($data['gasto_id']);
 
-            return $gasto->itens()->create([
+            $item = $gasto->itens()->create([
                 'nome'   => $data['nome'],
                 'valor'  => $data['valor'],
                 'motivo' => $data['motivo'] ?? null,
             ]);
+
+            $gasto->recalcularTotal();
+
+            return $item;
         });
     }
 }

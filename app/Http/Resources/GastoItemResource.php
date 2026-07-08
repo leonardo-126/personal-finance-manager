@@ -21,6 +21,12 @@ class GastoItemResource extends JsonResource
             'valor' => $this->valor,
             'motivo' => $this->motivo,
             'data_transacao' => $this->data_transacao,
+            'pessoa_id' => $this->pessoa_id,
+            'pessoa' => $this->whenLoaded('pessoa', fn () => $this->pessoa ? [
+                'id'   => $this->pessoa->id,
+                'nome' => $this->pessoa->nome,
+                'cor'  => $this->pessoa->cor,
+            ] : null),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

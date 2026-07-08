@@ -83,4 +83,8 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(GastosItens::class, Gastos::class, 'user_id', 'gasto_id');
     }
+    public function pessoas(): HasMany
+    {
+        return $this->hasMany(Pessoas::class);
+    }
 }

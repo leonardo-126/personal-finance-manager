@@ -17,6 +17,7 @@ class GastosItens extends Model
         'valor',
         'motivo',
         'data_transacao',
+        'pessoa_id',
     ];
 
     protected $casts = [
@@ -28,4 +29,8 @@ class GastosItens extends Model
         return $this->belongsTo(Gastos::class, 'gasto_id');
     }
 
+    public function pessoa(): BelongsTo
+    {
+        return $this->belongsTo(Pessoas::class, 'pessoa_id');
+    }
 }

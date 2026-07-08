@@ -10,7 +10,12 @@ class DeleteGastoItemAction
     public function execute(int $id): void
     {
         DB::transaction(function () use ($id) {
-            Auth::user()->gastosItens()->findOrFail($id)->delete();
+            $item = Auth::user()->gastosItens()->findOrFail($id);
+            $gasto = $item->gasto;
+
+            $item->delete();
+
+            $gasto?->recalcularTotal();
         });
     }
 }

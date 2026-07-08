@@ -15,11 +15,20 @@ class UpdateGastoItemAction
 
             $item = $gasto->itens()->findOrFail($id);
 
-            $item->update([
+            $atributos = [
                 'nome'   => $data['nome'],
                 'valor'  => $data['valor'],
                 'motivo' => $data['motivo'] ?? null,
-            ]);
+            ];
+
+            // Só altera a pessoa se o campo foi enviado (edição completa do item).
+            if (array_key_exists('pessoa_id', $data)) {
+                $atributos['pessoa_id'] = $data['pessoa_id'];
+            }
+
+            $item->update($atributos);
+
+            $gasto->recalcularTotal();
 
             return $item;
         });

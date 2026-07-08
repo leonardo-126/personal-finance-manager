@@ -14,7 +14,7 @@ class ShowGastoDetalhes extends Controller
      */
     public function __invoke(Request $request, int $id): FaturaResource
     {
-        $gasto = $request->user()->gastos()->with('itens')->findOrFail($id);
+        $gasto = $request->user()->gastos()->with('itens.pessoa')->findOrFail($id);
 
         return new FaturaResource($gasto);
     }

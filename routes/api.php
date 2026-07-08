@@ -22,6 +22,11 @@ use App\Http\Controllers\GastosItens\CreateGastoItem;
 use App\Http\Controllers\GastosItens\DeleteGastoItem;
 use App\Http\Controllers\GastosItens\ShowGastoItem;
 use App\Http\Controllers\GastosItens\UpdateGastoItem;
+use App\Http\Controllers\GastosItens\AtribuirPessoaItem;
+use App\Http\Controllers\Pessoas\CreatePessoa;
+use App\Http\Controllers\Pessoas\DeletePessoa;
+use App\Http\Controllers\Pessoas\ShowPessoa;
+use App\Http\Controllers\Pessoas\UpdatePessoa;
 use App\Http\Controllers\MovimentacoesCaixas\CreateMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\DeleteMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\ShowMovimentacaoCaixa;
@@ -95,7 +100,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/gastos-itens',          ShowGastoItem::class);
     Route::post('/gastos-itens',         CreateGastoItem::class);
     Route::put('/gastos-itens/{id}',     UpdateGastoItem::class);
+    Route::patch('/gastos-itens/{id}/pessoa', AtribuirPessoaItem::class);
     Route::delete('/gastos-itens/{id}',  DeleteGastoItem::class);
+
+    // Pessoas (quem usou o cartão)
+    Route::get('/pessoas',          ShowPessoa::class);
+    Route::post('/pessoas',         CreatePessoa::class);
+    Route::put('/pessoas/{id}',     UpdatePessoa::class);
+    Route::delete('/pessoas/{id}',  DeletePessoa::class);
 
     // Faturas de cartão (importação Nubank)
     Route::post('/faturas/preview',   PreviewFatura::class);

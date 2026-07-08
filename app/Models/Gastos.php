@@ -40,4 +40,15 @@ class Gastos extends Model
     {
         return $this->hasMany(GastosItens::class, 'gasto_id');
     }
+
+    /**
+     * Recalcula o valor_total como a soma dos itens e persiste.
+     * Usado ao criar/editar/remover itens (ex.: manipulação da fatura).
+     */
+    public function recalcularTotal(): void
+    {
+        $this->update([
+            'valor_total' => (float) $this->itens()->sum('valor'),
+        ]);
+    }
 }

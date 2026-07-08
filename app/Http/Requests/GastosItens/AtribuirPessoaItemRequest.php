@@ -5,7 +5,7 @@ namespace App\Http\Requests\GastosItens;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateGastoItemRequest extends FormRequest
+class AtribuirPessoaItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class UpdateGastoItemRequest extends FormRequest
      */
     public function rules(): array
     {
+        // pessoa_id nulo = desatribuir. A posse da pessoa é conferida na Action.
         return [
-            'gasto_id' => ['required', 'integer', 'exists:gastos,id'],
-            'nome'     => ['required', 'string', 'max:255'],
-            'valor'    => ['required', 'numeric'],
-            'motivo'   => ['nullable', 'string'],
             'pessoa_id' => ['nullable', 'integer', 'exists:pessoas,id'],
         ];
     }
