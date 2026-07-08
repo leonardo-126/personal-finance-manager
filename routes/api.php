@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoriasGastos\ShowCategoriaGasto;
 use App\Http\Controllers\CategoriasGastos\UpdateCategoriaGasto;
 use App\Http\Controllers\Faturas\ImportarFatura;
 use App\Http\Controllers\Faturas\PreviewFatura;
+use App\Http\Controllers\Faturas\ShowFaturas;
 use App\Http\Controllers\Gastos\CreateGasto;
 use App\Http\Controllers\Gastos\DeleteGasto;
 use App\Http\Controllers\Gastos\ShowGasto;
@@ -110,6 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/pessoas/{id}',  DeletePessoa::class);
 
     // Faturas de cartão (importação Nubank)
+    Route::get('/faturas',            ShowFaturas::class);
     Route::post('/faturas/preview',   PreviewFatura::class);
     Route::post('/faturas/importar',  ImportarFatura::class);
 });

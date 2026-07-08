@@ -18,7 +18,12 @@ class Gastos extends Model
         'categoria_id',
         'valor_total',
         'descricao',
+        'is_fatura',
         'data_gasto',
+    ];
+
+    protected $casts = [
+        'is_fatura' => 'boolean',
     ];
 
     public function user(): BelongsTo

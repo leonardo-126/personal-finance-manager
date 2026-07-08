@@ -21,6 +21,8 @@ class GastoResource extends JsonResource
             'categoria_id' => $this->categoria_id,
             'valor_total' => $this->valor_total,
             'descricao' => $this->descricao,
+            'is_fatura' => (bool) $this->is_fatura,
+            'itens_count' => $this->whenCounted('itens'),
             'data_gasto' => $this->data_gasto,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

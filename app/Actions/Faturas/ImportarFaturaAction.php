@@ -30,6 +30,7 @@ class ImportarFaturaAction
                 'categoria_id' => $data['categoria_id'],
                 'valor_total'  => $valorTotal,
                 'descricao'    => $data['descricao'] ?? 'Fatura importada do Nubank',
+                'is_fatura'    => true,
                 'data_gasto'   => $dataGasto,
             ]);
 
