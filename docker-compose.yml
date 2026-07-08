@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_URL: http://localhost:8000
+    volumes:
+      - .:/app
+      # Preserva as dependências instaladas na imagem (não sobrescreve com o host)
+      - backend_vendor:/app/vendor
+    restart: unless-stopped
+
+  # Worker de fila (importação de faturas, jobs, etc.)
+  queue:
+    build:
+      context: .
+    command: php artisan queue:work --tries=3 --timeout=90
+    environment:
+      APP_URL: http://localhost:8000
+      SKIP_SETUP: "true"
+    volumes:
+      - .:/app
+      - backend_vendor:/app/vendor
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_vendor:
