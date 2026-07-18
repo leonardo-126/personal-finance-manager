@@ -14,6 +14,11 @@ use App\Http\Controllers\CategoriasGastos\UpdateCategoriaGasto;
 use App\Http\Controllers\Faturas\ImportarFatura;
 use App\Http\Controllers\Faturas\PreviewFatura;
 use App\Http\Controllers\Faturas\ShowFaturas;
+use App\Http\Controllers\Faturas\Compartilhamento\ListarCompartilhamentos;
+use App\Http\Controllers\Faturas\Compartilhamento\CriarCompartilhamento;
+use App\Http\Controllers\Faturas\Compartilhamento\RevogarCompartilhamento;
+use App\Http\Controllers\FaturaPublica\ShowFaturaPublica;
+use App\Http\Controllers\FaturaPublica\MarcarItemPublico;
 use App\Http\Controllers\Gastos\CreateGasto;
 use App\Http\Controllers\Gastos\DeleteGasto;
 use App\Http\Controllers\Gastos\ShowGasto;
@@ -114,4 +119,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/faturas',            ShowFaturas::class);
     Route::post('/faturas/preview',   PreviewFatura::class);
     Route::post('/faturas/importar',  ImportarFatura::class);
+
+    // Compartilhamento de fatura (o dono gera/revoga um link por pessoa)
+    Route::get('/gastos/{id}/compartilhamentos',               ListarCompartilhamentos::class);
+    Route::post('/gastos/{id}/compartilhamentos',              CriarCompartilhamento::class);
+    Route::delete('/gastos/{id}/compartilhamentos/{pessoaId}', RevogarCompartilhamento::class);
 });
+
+// Acesso público à fatura via token de compartilhamento (sem login).
+Route::get('/fatura-compartilhada/{token}',              ShowFaturaPublica::class);
+Route::patch('/fatura-compartilhada/{token}/itens/{itemId}', MarcarItemPublico::class);
