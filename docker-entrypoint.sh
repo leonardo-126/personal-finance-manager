@@ -41,6 +41,10 @@ fi
 mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache
 chmod -R ug+rw storage bootstrap/cache || true
 
+# Link público para os arquivos enviados (avatares, etc.)
+echo "==> Garantindo o symlink public/storage..."
+php artisan storage:link --force
+
 # Executa as migrações
 echo "==> Rodando migrations..."
 php artisan migrate --force
