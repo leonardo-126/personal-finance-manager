@@ -1,60 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Personal Finance Manager — API (backend)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API em **Laravel 12** para um gerenciador de finanças pessoais: receitas, caixas,
+gastos, importação de faturas de cartão (Nubank), divisão de despesas por pessoa,
+compartilhamento de fatura por link e exportação.
 
-## About Laravel
+É a parte de servidor do projeto. O frontend (React) fica em
+[`personal-finance-manager-web`](../personal-finance-manager-web).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP** 8.2 · **Laravel** 12
+- **Autenticação:** Laravel Sanctum (SPA, baseada em sessão/cookie)
+- **Banco:** SQLite (arquivo em `database/database.sqlite`)
+- **Fila:** driver `database` (worker para importação de fatura)
+- **Storage:** disco `public` (upload de avatar)
+- **Docker:** serviços `backend` + `queue` via `docker-compose`
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Como rodar
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Opção 1 — Docker (recomendado)
 
-## Laravel Sponsors
+Sobe a API em `http://localhost:8000` e um worker de fila. O
+[`docker-entrypoint.sh`](docker-entrypoint.sh) cuida sozinho de: criar o `.env`,
+gerar a `APP_KEY`, criar o arquivo SQLite, rodar as migrations e o `storage:link`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+docker compose up -d --build
 
-### Premium Partners
+# logs
+docker compose logs -f backend
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# comandos artisan dentro do container
+docker compose exec backend php artisan migrate
+docker compose exec backend php artisan tinker
+```
 
-## Contributing
+### Opção 2 — Local (sem Docker)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Requer PHP 8.2+, Composer e a extensão `pdo_sqlite`.
 
-## Code of Conduct
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# banco SQLite
+touch database/database.sqlite
+php artisan migrate
 
-## Security Vulnerabilities
+# link público para os uploads (avatares)
+php artisan storage:link
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# em terminais separados:
+php artisan serve            # API em http://localhost:8000
+php artisan queue:work       # worker da fila (importação de fatura)
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# personal-finance-manager" 
+## Variáveis de ambiente principais
+
+| Variável | Descrição | Valor típico (dev) |
+|---|---|---|
+| `APP_URL` | URL pública da API (usada para montar links de arquivos) | `http://localhost:8000` |
+| `DB_CONNECTION` | Driver do banco | `sqlite` |
+| `QUEUE_CONNECTION` | Driver da fila | `database` |
+| `FILESYSTEM_DISK` | Disco de arquivos | `local` |
+| `SANCTUM_STATEFUL_DOMAINS` | Domínios do frontend que recebem sessão | `localhost:5173,127.0.0.1:5173` |
+
+> **CORS / Sanctum:** o frontend acessa via cookie/sessão. Mantenha a origem do
+> frontend em `config/cors.php` (`allowed_origins`) e em `SANCTUM_STATEFUL_DOMAINS`.
+> `supports_credentials` deve ser `true`.
+
+---
+
+## Módulos e endpoints
+
+Todas as rotas abaixo de `/api`. Salvo indicação, exigem autenticação
+(`auth:sanctum`).
+
+### Autenticação
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/auth/register` | Cadastro |
+| POST | `/auth/login` | Login |
+| POST | `/auth/logout` | Logout |
+| GET | `/auth/me` | Usuário autenticado (com perfil) |
+
+### Perfil
+`GET/POST/PUT /profile` — dados do perfil e upload de avatar.
+
+### Finanças
+- **Fontes de renda:** `GET/POST/PUT/DELETE /fontes-renda`
+- **Rendas:** `GET/POST/PUT/DELETE /rendas`
+- **Caixas financeiras:** `GET/POST/PUT/DELETE /caixas-financeiras`
+- **Movimentações de caixa:** `GET/POST/PUT/DELETE /movimentacoes-caixas`
+- **Categorias de gastos:** `GET/POST/PUT/DELETE /categorias-gastos`
+- **Gastos:** `GET/POST/PUT/DELETE /gastos` · `GET /gastos/{id}` (com itens)
+- **Itens de gasto:** `GET/POST/PUT/DELETE /gastos-itens` · `PATCH /gastos-itens/{id}/pessoa` (atribui pessoa)
+- **Pessoas:** `GET/POST/PUT/DELETE /pessoas` (quem participa da divisão)
+
+### Faturas de cartão
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/faturas` | Lista as faturas (gastos marcados como fatura) |
+| POST | `/faturas/preview` | Lê o arquivo e devolve as transações, sem salvar |
+| POST | `/faturas/importar` | Importa a fatura (1 item por transação) |
+
+Parser: [`app/Services/NubankFaturaParser.php`](app/Services/NubankFaturaParser.php).
+
+### Compartilhamento de fatura
+O dono gera **um link único por pessoa**; a pessoa abre sem login e marca os itens
+que são dela.
+
+| Método | Rota | Auth | Descrição |
+|---|---|---|---|
+| GET | `/gastos/{id}/compartilhamentos` | sim | Lista os links da fatura |
+| POST | `/gastos/{id}/compartilhamentos` | sim | Cria/retorna o link de uma pessoa |
+| DELETE | `/gastos/{id}/compartilhamentos/{pessoaId}` | sim | Revoga o link |
+| GET | `/fatura-compartilhada/{token}` | **não** | Fatura acessada pelo token |
+| PATCH | `/fatura-compartilhada/{token}/itens/{itemId}` | **não** | Marca/desmarca item como da pessoa |
+
+---
+
+## Estrutura
+
+```
+app/
+├── Actions/           # regras de negócio (uma ação por caso de uso)
+├── Http/
+│   ├── Controllers/   # controllers de ação única (__invoke)
+│   ├── Requests/      # validação (FormRequest)
+│   └── Resources/     # serialização das respostas JSON
+├── Models/            # Eloquent
+└── Services/          # ex.: parser de fatura Nubank
+database/migrations/   # schema
+routes/api.php         # todas as rotas da API
+```
+
+Padrão do projeto: **controller fino** (`__invoke`) → **Action** (lógica) →
+**Resource** (resposta). A validação fica em **FormRequest**.
+
+---
+
+## Testes
+
+```bash
+php artisan test
+# ou dentro do Docker:
+docker compose exec backend php artisan test
+```
