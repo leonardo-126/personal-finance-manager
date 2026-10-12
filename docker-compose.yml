@@ -27,5 +27,20 @@ services:
       - backend
     restart: unless-stopped
 
+  # Agendador (sincronização diária do Open Finance, etc.)
+  scheduler:
+    build:
+      context: .
+    command: php artisan schedule:work
+    environment:
+      APP_URL: http://localhost:8000
+      SKIP_SETUP: "true"
+    volumes:
+      - .:/app
+      - backend_vendor:/app/vendor
+    depends_on:
+      - backend
+    restart: unless-stopped
+
 volumes:
   backend_vendor:

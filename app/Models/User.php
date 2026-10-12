@@ -87,4 +87,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pessoas::class);
     }
+    public function openFinanceConexoes(): HasMany
+    {
+        return $this->hasMany(OpenFinanceConexao::class);
+    }
+    public function openFinanceContas(): HasMany
+    {
+        return $this->hasMany(OpenFinanceConta::class);
+    }
+    public function openFinanceTransacoes(): HasMany
+    {
+        return $this->hasMany(OpenFinanceTransacao::class);
+    }
 }

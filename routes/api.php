@@ -34,6 +34,16 @@ use App\Http\Controllers\Pessoas\DeletePessoa;
 use App\Http\Controllers\Pessoas\ShowPessoa;
 use App\Http\Controllers\Pessoas\UpdatePessoa;
 use App\Http\Controllers\MovimentacoesCaixas\CreateMovimentacaoCaixa;
+use App\Http\Controllers\OpenFinance\AtualizarConta;
+use App\Http\Controllers\OpenFinance\AtualizarTransacao;
+use App\Http\Controllers\OpenFinance\CriarTokenConexao;
+use App\Http\Controllers\OpenFinance\ImportarTransacoes;
+use App\Http\Controllers\OpenFinance\ListarConexoes;
+use App\Http\Controllers\OpenFinance\ListarTransacoes;
+use App\Http\Controllers\OpenFinance\ReceberWebhook;
+use App\Http\Controllers\OpenFinance\RegistrarConexao;
+use App\Http\Controllers\OpenFinance\RemoverConexao;
+use App\Http\Controllers\OpenFinance\SincronizarConexao;
 use App\Http\Controllers\MovimentacoesCaixas\DeleteMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\ShowMovimentacaoCaixa;
 use App\Http\Controllers\MovimentacoesCaixas\UpdateMovimentacaoCaixa;
@@ -124,7 +134,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/gastos/{id}/compartilhamentos',               ListarCompartilhamentos::class);
     Route::post('/gastos/{id}/compartilhamentos',              CriarCompartilhamento::class);
     Route::delete('/gastos/{id}/compartilhamentos/{pessoaId}', RevogarCompartilhamento::class);
+
+    // Open Finance: conexões com bancos via agregador e conciliação das transações
+    Route::post('/open-finance/connect-token',                   CriarTokenConexao::class);
+    Route::get('/open-finance/conexoes',                         ListarConexoes::class);
+    Route::post('/open-finance/conexoes',                        RegistrarConexao::class);
+    Route::post('/open-finance/conexoes/{id}/sincronizar',       SincronizarConexao::class)->middleware('throttle:6,1');
+    Route::delete('/open-finance/conexoes/{id}',                 RemoverConexao::class);
+    Route::patch('/open-finance/contas/{id}',                    AtualizarConta::class);
+    Route::post('/open-finance/contas/{id}/importar-fatura',     ImportarTransacoes::class);
+    Route::get('/open-finance/transacoes',                       ListarTransacoes::class);
+    Route::patch('/open-finance/transacoes/{id}',                AtualizarTransacao::class);
 });
+
+// Webhook do agregador de Open Finance (autenticado por segredo compartilhado).
+Route::post('/webhooks/open-finance', ReceberWebhook::class)->middleware('throttle:120,1');
 
 // Acesso público à fatura via token de compartilhamento (sem login).
 Route::get('/fatura-compartilhada/{token}',              ShowFaturaPublica::class);
