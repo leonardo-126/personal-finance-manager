@@ -41,7 +41,7 @@ class FakeProvider implements OpenFinanceProvider
     {
         return [
             new ContaData("{$externalId}-corrente", TipoContaOpenFinance::Corrente, 'Conta Corrente', '0001234567', 2500.00),
-            new ContaData("{$externalId}-cartao", TipoContaOpenFinance::Cartao, 'Cartão de Crédito', '5555444433331111', -730.40),
+            new ContaData("{$externalId}-cartao", TipoContaOpenFinance::Cartao, 'Cartão de Crédito', '5555444433331111', 730.40),
         ];
     }
 
